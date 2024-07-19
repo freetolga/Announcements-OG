@@ -10,7 +10,7 @@ java {
     sourceCompatibility = JavaVersion.VERSION_17
 }
 
-group = "net.trueog.kotlintemplate-og" // Declare bundle identifier.
+group = "net.trueog.template-og" // Declare bundle identifier.
 version = "1.0" // Declare plugin version (will be in .jar).
 val apiVersion = "1.19" // Declare minecraft server target version.
 
