@@ -1,8 +1,8 @@
 plugins {
+    id("com.gradleup.shadow") version "8.3.2" // Import shadow API.
     java // Tell gradle this is a java project.
-    id("io.github.goooler.shadow") version "8.1.8"
     eclipse // Import eclipse plugin for IDE integration.
-    kotlin("jvm") version "1.9.23" // Import kotlin jvm plugin for kotlin/java integration.
+    kotlin("jvm") version "2.0.20" // Import kotlin jvm plugin for kotlin/java integration.
 }
 
 java {
@@ -29,7 +29,7 @@ tasks.named<ProcessResources>("processResources") {
 
 repositories {
     mavenCentral()
-
+    gradlePluginPortal()
     maven {
         url = uri("https://repo.purpurmc.org/snapshots")
     }
