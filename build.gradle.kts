@@ -40,7 +40,7 @@ dependencies {
     compileOnly("io.github.miniplaceholders:miniplaceholders-api:2.2.3") // Import MiniPlaceholders API.
 
     implementation(project(":libs:Utilities-OG"))
-    implementation(project(":libs:GxUI"))
+    implementation(project(":libs:GxUI-OG"))
     implementation(project(":libs:DiamondBank-OG"))
 }
 

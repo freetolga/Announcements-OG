@@ -64,7 +64,7 @@ public class SpectatorGui extends GUIBase {
 
 			};
 
-			item.button(guibutton);
+			item. .button(guibutton);
 
 			addItem(curr, item);
 			curr = nextCurr(curr);
