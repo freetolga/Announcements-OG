@@ -44,19 +44,9 @@ dependencies {
     implementation(project(":libs:DiamondBank-OG"))
 }
 
-tasks.withType<AbstractArchiveTask>().configureEach {
+tasks.withType<AbstractArchiveTask>().configureEach { // Ensure reproducible builds.
     isPreserveFileTimestamps = false
     isReproducibleFileOrder = true
-}
-
-tasks.shadowJar {
-    exclude("io.github.miniplaceholders.*") // Exclude the MiniPlaceholders package from being shadowed.
-    minimize()
-}
-
-tasks.jar {
-    dependsOn(tasks.shadowJar)
-    archiveClassifier.set("part")
 }
 
 tasks.shadowJar {
@@ -64,10 +54,16 @@ tasks.shadowJar {
     from("LICENSE") {
         into("/")
     }
+    exclude("io.github.miniplaceholders.*") // Exclude the MiniPlaceholders package from being shadowed.
+    minimize()
+}
+
+tasks.build {
+    dependsOn(tasks.shadowJar)
 }
 
 tasks.jar {
-    dependsOn("shadowJar")
+    archiveClassifier.set("part")
 }
 
 tasks.withType<JavaCompile>().configureEach {
