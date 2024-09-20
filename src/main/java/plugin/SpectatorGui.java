@@ -13,9 +13,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
-import uk.hotten.gxui.GUIBase;
-import uk.hotten.gxui.GUIButton;
-import uk.hotten.gxui.GUIItem;
+import net.trueog.gxui.GUIBase;
+import net.trueog.gxui.GUIButton;
+import net.trueog.gxui.GUIItem;
 
 public class SpectatorGui extends GUIBase {
 
@@ -64,7 +64,7 @@ public class SpectatorGui extends GUIBase {
 
 			};
 
-			item. .button(guibutton);
+			item.setButton(guibutton);
 
 			addItem(curr, item);
 			curr = nextCurr(curr);
