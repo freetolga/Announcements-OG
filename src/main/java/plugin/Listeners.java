@@ -1,23 +1,38 @@
-// This is free and unencumbered software released into the public domain.
-// Author: NotAlexNoyle.
 package plugin;
 
-// Import libraries.
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 
-// Hook into Bukkit's Listener.
+import net.trueog.utilitiesog.UtilitiesOG;
+
 public class Listeners implements Listener {
 
-	// Perform this plugin's action before other plugins actions.
 	@EventHandler(priority = EventPriority.HIGHEST)
-	// When a block is broken, do this...
 	public void onBlockBreak(BlockBreakEvent event) {
 
-		// Open a spectator GUI for the player who broke the block.
-		new SpectatorGui(TemplateOG.getPlugin(), event.getPlayer());
+		//CompletableFuture<PostgreSQL.PlayerBalance> asyncPlayerBalance = DiamondBankOG.getApi().getPlayerBalance(event.getPlayer().getUniqueId(), PostgreSQL.BalanceType.ALL);
+
+		//try {
+
+		//PostgreSQL.PlayerBalance balanceResult = asyncPlayerBalance.get();
+
+		//double totalBalance = balanceResult.getBankBalance() + balanceResult.getEnderChestBalance() + balanceResult.getInventoryBalance();
+
+		// Send a message to the player with their balance.
+
+		UtilitiesOG.trueogMessage(event.getPlayer(), "&BYour balance is: &e" + 5 + "&B Diamonds.");
+
+		UtilitiesOG.logToConsole("[Template-OG]", "The player: " + event.getPlayer() + "'s <aqua>balance</aqua> is: " + 5 + "&B Diamonds");
+
+
+		//}
+		//catch (InterruptedException | ExecutionException error) {
+
+		//	UtilitiesOG.logToConsole(TemplateOG.getPlugin(), "ERROR: The player: " + event.getPlayer() + "'s balance could not be fetched! ERROR: " + error.getMessage());
+
+		//}
 
 	}
 
