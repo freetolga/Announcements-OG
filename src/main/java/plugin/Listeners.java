@@ -17,7 +17,7 @@ public class Listeners implements Listener {
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onBlockBreak(BlockBreakEvent event) {
 
-		CompletableFuture<PostgreSQL.PlayerBalance> asyncPlayerBalance = DiamondBankOG.getApi().getPlayerBalance(event.getPlayer().getUniqueId(), PostgreSQL.BalanceType.ALL);
+		CompletableFuture<PostgreSQL.PlayerBalance> asyncPlayerBalance = TemplateOG.diamondBankAPI().getPlayerBalance(event.getPlayer().getUniqueId(), PostgreSQL.BalanceType.ALL);
 
 		try {
 
