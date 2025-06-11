@@ -1,6 +1,6 @@
 package plugin;
 
-import net.trueog.diamondbankog.DiamondBankAPIJava.DiamondBankException;
+import net.trueog.diamondbankog.DiamondBankException;
 import net.trueog.utilitiesog.UtilitiesOG;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
