@@ -1,22 +1,21 @@
 package plugin;
 
+import net.trueog.diamondbankog.DiamondBankAPIJava;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import net.trueog.diamondbankog.DiamondBankAPI;
-
 public class TemplateOG extends JavaPlugin {
 
 	private static TemplateOG plugin;
-	private static DiamondBankAPI diamondBankAPI;
+	private static DiamondBankAPIJava diamondBankAPI;
 
 	public void onEnable() {
 		plugin = this;
 
 		getServer().getPluginManager().registerEvents(new Listeners(), this);
 
-		RegisteredServiceProvider<DiamondBankAPI> diamondBankAPIProvider = getServer().getServicesManager().getRegistration(DiamondBankAPI.class);
+		RegisteredServiceProvider<DiamondBankAPIJava> diamondBankAPIProvider = getServer().getServicesManager().getRegistration(DiamondBankAPIJava.class);
 		if (diamondBankAPIProvider == null) {
 			getLogger().severe("DiamondBank-OG API is null");
 			Bukkit.getPluginManager().disablePlugin(this);
@@ -29,7 +28,7 @@ public class TemplateOG extends JavaPlugin {
 		return plugin;
 	}
 
-	public static DiamondBankAPI diamondBankAPI() {
+	public static DiamondBankAPIJava diamondBankAPI() {
 		return diamondBankAPI;
 	}
 }

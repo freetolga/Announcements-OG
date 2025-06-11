@@ -1,6 +1,6 @@
 package plugin;
 
-import net.trueog.diamondbankog.DiamondBankAPI;
+import net.trueog.diamondbankog.DiamondBankAPIJava.DiamondBankException;
 import net.trueog.utilitiesog.UtilitiesOG;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
@@ -24,13 +24,13 @@ public class Listeners implements Listener {
             CompletableFuture<PlayerShards> completablePlayerShards;
             try {
                 completablePlayerShards = TemplateOG.diamondBankAPI().getPlayerShards(event.getPlayer().getUniqueId(), ShardType.ALL);
-            } catch (DiamondBankAPI.DiamondBankException.EconomyDisabledException e) {
+            } catch (DiamondBankException.EconomyDisabledException e) {
                 UtilitiesOG.trueogMessage(event.getPlayer(), "<red>The economy is disabled.");
                 return;
-            } catch (DiamondBankAPI.DiamondBankException.TransactionsLockedException e) {
+            } catch (DiamondBankException.TransactionsLockedException e) {
                 UtilitiesOG.trueogMessage(event.getPlayer(), "<red>Your transactions are locked.");
                 return;
-            } catch (DiamondBankAPI.DiamondBankException.OtherException e) {
+            } catch (DiamondBankException.OtherException e) {
                 UtilitiesOG.trueogMessage(event.getPlayer(), "<red>Something went wrong.");
                 return;
             }
