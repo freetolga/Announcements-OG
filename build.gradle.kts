@@ -1,6 +1,6 @@
 plugins {
     java // Tell gradle this is a java project.
-	id("java-library") // Import helper for source-based libraries.
+    id("java-library") // Import helper for source-based libraries.
     id("com.gradleup.shadow") version "8.3.6" // Import shadow API.
     eclipse // Import eclipse plugin for IDE integration.
 }
