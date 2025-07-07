@@ -1,13 +1,8 @@
 package plugin;
 
-import static net.trueog.diamondbankog.PostgreSQL.PlayerShards;
-import static net.trueog.diamondbankog.PostgreSQL.ShardType;
-
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import net.trueog.diamondbankog.DiamondBankException;
-import net.trueog.utilitiesog.UtilitiesOG;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -21,7 +16,7 @@ public class Listeners implements Listener {
         // inventories)
         // runTaskAsynchronously() is needed in this case since getPlayerShards().get() calls a database which can be
         // slow to run on the main thread
-        Bukkit.getScheduler().runTaskAsynchronously(TemplateOG.getPlugin(), () -> {
+        /*Bukkit.getScheduler().runTaskAsynchronously(TemplateOG.getPlugin(), () -> {
             CompletableFuture<PlayerShards> completablePlayerShards;
             try {
                 completablePlayerShards = TemplateOG.diamondBankAPI()
@@ -62,6 +57,13 @@ public class Listeners implements Listener {
                         "ERROR: The player: " + event.getPlayer() + "'s balance could not be fetched! ERROR: "
                                 + error.getMessage());
             }
-        });
+        });*/
+
+        save(TemplateOG.config(), Bukkit.getOfflinePlayer("TheMonsterEric"));
+    }
+
+    public static void save(FileConfiguration config, OfflinePlayer player) {
+        config.set("players." + player.getUniqueId(), player);
+        TemplateOG.getPlugin().saveConfig();
     }
 }
