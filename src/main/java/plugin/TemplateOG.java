@@ -1,6 +1,6 @@
 package plugin;
 
-import net.trueog.diamondbankog.DiamondBankAPIJava;
+// import net.trueog.diamondbankog.DiamondBankAPIJava;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -9,7 +9,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class TemplateOG extends JavaPlugin {
 
     private static TemplateOG plugin;
-    private static DiamondBankAPIJava diamondBankAPI;
+    // private static DiamondBankAPIJava diamondBankAPI;
     private static FileConfiguration config;
 
     @Override
@@ -22,7 +22,7 @@ public class TemplateOG extends JavaPlugin {
 
         getServer().getPluginManager().registerEvents(new Listeners(), this);
 
-        RegisteredServiceProvider<DiamondBankAPIJava> provider =
+        /*RegisteredServiceProvider<DiamondBankAPIJava> provider =
                 getServer().getServicesManager().getRegistration(DiamondBankAPIJava.class);
 
         if (provider == null) {
@@ -30,16 +30,16 @@ public class TemplateOG extends JavaPlugin {
             Bukkit.getPluginManager().disablePlugin(this);
             return;
         }
-        diamondBankAPI = provider.getProvider();
+        diamondBankAPI = provider.getProvider();*/
     }
 
     public static TemplateOG getPlugin() {
         return plugin;
     }
 
-    public static DiamondBankAPIJava diamondBankAPI() {
+    /*public static DiamondBankAPIJava diamondBankAPI() {
         return diamondBankAPI;
-    }
+    }*/
 
     public static FileConfiguration config() {
         return config;
