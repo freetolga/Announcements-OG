@@ -1,9 +1,7 @@
 package plugin;
 
 // import net.trueog.diamondbankog.DiamondBankAPIJava;
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class TemplateOG extends JavaPlugin {

@@ -39,7 +39,7 @@ dependencies {
     compileOnly("io.github.miniplaceholders:miniplaceholders-api:2.2.3") // Import MiniPlaceholders API.
     compileOnlyApi(project(":libs:Utilities-OG")) // Import TrueOG Network Utilities-OG API.
     compileOnlyApi(project(":libs:GxUI-OG")) // Import TrueOG Network GxUI-OG API.
-    //compileOnlyApi(project(":libs:DiamondBank-OG")) // Import TrueOG Network DiamondBank-OG API.
+    // compileOnlyApi(project(":libs:DiamondBank-OG")) // Import TrueOG Network DiamondBank-OG API.
 }
 
 tasks.withType<AbstractArchiveTask>().configureEach { // Ensure reproducible .jars
