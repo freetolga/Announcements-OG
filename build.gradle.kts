@@ -56,7 +56,7 @@ dependencies {
     compileOnlyApi(project(":libs:Utilities-OG")) // Import TrueOG Network Utilities-OG API.
     compileOnlyApi(project(":libs:GxUI-OG")) // Import TrueOG Network GxUI-OG API.
     compileOnlyApi(
-        "net.trueog.diamondbank-og:diamondbank-og:1.19-e869a95a1c"
+        "net.trueog.diamondbank-og:diamondbank-og:1.19-190fb1dc21"
     ) // Import TrueOG Network DiamondBank-OG API.
 }
 
