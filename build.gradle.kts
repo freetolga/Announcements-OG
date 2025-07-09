@@ -17,6 +17,8 @@ java {
     }
 }
 
+kotlin { jvmToolchain(17) }
+
 group = "net.trueog.template-og" // Declare bundle identifier.
 
 version = "1.0" // Declare plugin version (will be in .jar).
@@ -32,7 +34,6 @@ tasks.named<ProcessResources>("processResources") {
 
 repositories {
     mavenCentral()
-    mavenLocal()
     gradlePluginPortal()
     maven { url = uri("https://repo.purpurmc.org/snapshots") }
     maven { url = uri("file://${System.getProperty("user.home")}/.m2/repository") }
@@ -79,10 +80,14 @@ tasks.build {
 tasks.jar { archiveClassifier.set("part") }
 
 tasks.withType<JavaCompile>().configureEach {
-    options.compilerArgs.add("-parameters")
-    options.compilerArgs.add("-Xlint:deprecation") // Triggers deprecation warning messages.
+    dependsOn(":libs:DiamondBank-OG:publishToMavenLocal")
+    options.compilerArgs.addAll(listOf("-parameters", "-Xlint:deprecation")) // Triggers deprecation warning messages.
     options.encoding = "UTF-8"
     options.isFork = true
+}
+
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+    dependsOn(":libs:DiamondBank-OG:publishToMavenLocal")
 }
 
 spotless {
@@ -95,13 +100,3 @@ spotless {
         target("build.gradle.kts", "settings.gradle.kts")
     }
 }
-
-val publishDiamondBankToLocal by
-    tasks.registering(GradleBuild::class) {
-        dir = file("libs/DiamondBank-OG")
-        tasks = listOf("publishToMavenLocal")
-    }
-
-tasks.withType<JavaCompile>().configureEach { dependsOn(publishDiamondBankToLocal) }
-
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach { dependsOn(publishDiamondBankToLocal) }
