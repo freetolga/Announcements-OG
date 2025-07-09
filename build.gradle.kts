@@ -1,5 +1,3 @@
-import org.gradle.api.tasks.GradleBuild
-
 plugins {
     id("java") // Tell gradle this is a java project.
     id("java-library") // Import helper for source-based libraries.
@@ -11,8 +9,12 @@ plugins {
 }
 
 java {
-    // Declare java version.
-    sourceCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility = JavaVersion.VERSION_17 // Compile with JDK 17 compatibility.
+
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17)) // Use JDK 17.
+        vendor.set(JvmVendorSpec.GRAAL_VM) // Use GraalVM CE.
+    }
 }
 
 group = "net.trueog.template-og" // Declare bundle identifier.
@@ -33,6 +35,19 @@ repositories {
     mavenLocal()
     gradlePluginPortal()
     maven { url = uri("https://repo.purpurmc.org/snapshots") }
+    maven { url = uri("file://${System.getProperty("user.home")}/.m2/repository") }
+    val customMavenLocal = System.getProperty("SELF_MAVEN_LOCAL_REPO")
+    if (customMavenLocal != null) {
+        val mavenLocalDir = file(customMavenLocal)
+        if (mavenLocalDir.isDirectory) {
+            println("Using SELF_MAVEN_LOCAL_REPO at: $customMavenLocal")
+            maven { url = uri("file://${mavenLocalDir.absolutePath}") }
+        } else {
+            logger.error("TrueOG Bootstrap not found, defaulting to ~/.m2 for mavenLocal()")
+        }
+    } else {
+        logger.error("TrueOG Bootstrap not found, defaulting to ~/.m2 for mavenLocal()")
+    }
 }
 
 dependencies {
@@ -41,7 +56,7 @@ dependencies {
     compileOnlyApi(project(":libs:Utilities-OG")) // Import TrueOG Network Utilities-OG API.
     compileOnlyApi(project(":libs:GxUI-OG")) // Import TrueOG Network GxUI-OG API.
     compileOnlyApi(
-        "net.trueog.diamondbank-og:diamondbank-og:1.19-18bab3eab4"
+        "net.trueog.diamondbank-og:diamondbank-og:1.19-e869a95a1c"
     ) // Import TrueOG Network DiamondBank-OG API.
 }
 
@@ -68,11 +83,6 @@ tasks.withType<JavaCompile>().configureEach {
     options.compilerArgs.add("-Xlint:deprecation") // Triggers deprecation warning messages.
     options.encoding = "UTF-8"
     options.isFork = true
-}
-
-java.toolchain {
-    languageVersion = JavaLanguageVersion.of(17)
-    vendor = JvmVendorSpec.GRAAL_VM
 }
 
 spotless {
