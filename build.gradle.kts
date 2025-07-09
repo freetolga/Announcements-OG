@@ -1,7 +1,10 @@
+import org.gradle.api.tasks.GradleBuild
+
 plugins {
     id("java") // Tell gradle this is a java project.
     id("java-library") // Import helper for source-based libraries.
-    kotlin("jvm") version "2.1.21" // Import kotlin jvm plugin for kotlin/java integration (Required for DiamondBank-OG API)
+    kotlin("jvm") version
+        "2.1.21" // Import kotlin jvm plugin for kotlin/java integration (Required for DiamondBank-OG API)
     id("com.diffplug.spotless") version "7.0.4" // Import auto-formatter.
     id("com.gradleup.shadow") version "8.3.6" // Import shadow API.
     eclipse // Import eclipse plugin for IDE integration.
@@ -20,17 +23,14 @@ val apiVersion = "1.19" // Declare minecraft server target version.
 
 tasks.named<ProcessResources>("processResources") {
     val props = mapOf("version" to version, "apiVersion" to apiVersion)
-
     inputs.properties(props) // Indicates to rerun if version changes.
-
     filesMatching("plugin.yml") { expand(props) }
-    from("LICENSE") { // Bundle license into .jars.
-        into("/")
-    }
+    from("LICENSE") { into("/") } // Bundle license into .jars.
 }
 
 repositories {
     mavenCentral()
+    mavenLocal()
     gradlePluginPortal()
     maven { url = uri("https://repo.purpurmc.org/snapshots") }
 }
@@ -40,7 +40,9 @@ dependencies {
     compileOnly("io.github.miniplaceholders:miniplaceholders-api:2.2.3") // Import MiniPlaceholders API.
     compileOnlyApi(project(":libs:Utilities-OG")) // Import TrueOG Network Utilities-OG API.
     compileOnlyApi(project(":libs:GxUI-OG")) // Import TrueOG Network GxUI-OG API.
-    // compileOnlyApi(project(":libs:DiamondBank-OG")) // Import TrueOG Network DiamondBank-OG API.
+    compileOnlyApi(
+        "net.trueog.diamondbank-og:diamondbank-og:1.19-18bab3eab4"
+    ) // Import TrueOG Network DiamondBank-OG API.
 }
 
 tasks.withType<AbstractArchiveTask>().configureEach { // Ensure reproducible .jars
@@ -68,11 +70,9 @@ tasks.withType<JavaCompile>().configureEach {
     options.isFork = true
 }
 
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
-        vendor = JvmVendorSpec.GRAAL_VM
-    }
+java.toolchain {
+    languageVersion = JavaLanguageVersion.of(17)
+    vendor = JvmVendorSpec.GRAAL_VM
 }
 
 spotless {
@@ -85,3 +85,13 @@ spotless {
         target("build.gradle.kts", "settings.gradle.kts")
     }
 }
+
+val publishDiamondBankToLocal by
+    tasks.registering(GradleBuild::class) {
+        dir = file("libs/DiamondBank-OG")
+        tasks = listOf("publishToMavenLocal")
+    }
+
+tasks.withType<JavaCompile>().configureEach { dependsOn(publishDiamondBankToLocal) }
+
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach { dependsOn(publishDiamondBankToLocal) }
