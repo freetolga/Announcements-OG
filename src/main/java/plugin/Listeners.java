@@ -1,5 +1,7 @@
 package plugin;
 
+import net.trueog.diamondbankog.DiamondBankException;
+import net.trueog.utilitiesog.UtilitiesOG;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -14,50 +16,37 @@ public class Listeners implements Listener {
     public void onBlockBreak(BlockBreakEvent event) {
         // Make sure to never run any other Bukkit functions in runTaskAsynchronously() (for example accessing players'
         // inventories)
-        // runTaskAsynchronously() is needed in this case since getPlayerShards().get() calls a database which can be
-        // slow to run on the main thread
-        /*Bukkit.getScheduler().runTaskAsynchronously(TemplateOG.getPlugin(), () -> {
-            CompletableFuture<PlayerShards> completablePlayerShards;
+        // runTaskAsynchronously() is needed in this case since getTotalShards() calls a database which can be
+        // too slow to run on the main thread
+        Bukkit.getScheduler().runTaskAsynchronously(TemplateOG.getPlugin(), () -> {
+            int totalShards;
             try {
-                completablePlayerShards = TemplateOG.diamondBankAPI()
-                        .getPlayerShards(event.getPlayer().getUniqueId(), ShardType.ALL);
+                totalShards = TemplateOG.diamondBankAPI()
+                        .getTotalShards(event.getPlayer().getUniqueId());
             } catch (DiamondBankException.EconomyDisabledException e) {
                 UtilitiesOG.trueogMessage(event.getPlayer(), "<red>The economy is disabled.");
                 return;
             } catch (DiamondBankException.TransactionsLockedException e) {
-                UtilitiesOG.trueogMessage(event.getPlayer(), "<red>Your transactions are locked.");
+                UtilitiesOG.trueogMessage(event.getPlayer(), "<red>Transactions are currently locked for you.");
                 return;
-            } catch (DiamondBankException.OtherException e) {
-                UtilitiesOG.trueogMessage(event.getPlayer(), "<red>Something went wrong.");
+            } catch (DiamondBankException.DatabaseException e) {
+                UtilitiesOG.trueogMessage(event.getPlayer(), "<red>Something went wrong with the database.");
                 return;
             }
+            // If you don't care about the specific exceptions you can also do the following:
+            //            try {
+            //                totalShards = TemplateOG.diamondBankAPI().getTotalShards(event.getPlayer().getUniqueId());
+            //            } catch (DiamondBankException e) {
+            //                UtilitiesOG.trueogMessage(event.getPlayer(), "<red>Something went wrong.");
+            //            }
 
-            try {
-                PlayerShards playerShardsResult = completablePlayerShards.get();
-                if (playerShardsResult.getShardsInBank() == null
-                        || playerShardsResult.getShardsInInventory() == null
-                        || playerShardsResult.getShardsInEnderChest() == null) {
-                    UtilitiesOG.trueogMessage(event.getPlayer(), "<red>An error has occurred.");
-                    return;
-                }
-                double totalBalance = playerShardsResult.getShardsInBank()
-                        + playerShardsResult.getShardsInInventory()
-                        + playerShardsResult.getShardsInEnderChest();
-
-                // Send a message to the player with their balance.
-                UtilitiesOG.trueogMessage(event.getPlayer(), "&BYour balance is: &e" + totalBalance + "&B Diamonds.");
-                UtilitiesOG.logToConsole(
-                        "[Template-OG]",
-                        "The player: " + event.getPlayer() + "'s <aqua>balance</aqua> is: " + totalBalance
-                                + "&B Diamonds");
-
-            } catch (InterruptedException | ExecutionException error) {
-                UtilitiesOG.logToConsole(
-                        "[Template-OG]",
-                        "ERROR: The player: " + event.getPlayer() + "'s balance could not be fetched! ERROR: "
-                                + error.getMessage());
-            }
-        });*/
+            // Send a message to the player with their balance.
+            UtilitiesOG.trueogMessage(event.getPlayer(), "&BYour balance is: &e" + totalShards + "&B Diamond Shards.");
+            UtilitiesOG.logToConsole(
+                    "[Template-OG]",
+                    "The player: " + event.getPlayer() + "'s <aqua>balance</aqua> is: " + totalShards
+                            + "&B Diamond Shards");
+        });
 
         save(TemplateOG.config(), Bukkit.getOfflinePlayer("TheMonsterEric"));
     }

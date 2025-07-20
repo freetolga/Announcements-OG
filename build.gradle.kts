@@ -56,9 +56,7 @@ dependencies {
     compileOnly("io.github.miniplaceholders:miniplaceholders-api:2.2.3") // Import MiniPlaceholders API.
     compileOnlyApi(project(":libs:Utilities-OG")) // Import TrueOG Network Utilities-OG API.
     compileOnlyApi(project(":libs:GxUI-OG")) // Import TrueOG Network GxUI-OG API.
-    compileOnlyApi(
-        "net.trueog.diamondbank-og:diamondbank-og:1.19-7957b9127d"
-    ) // Import TrueOG Network DiamondBank-OG API.
+    compileOnlyApi(project(":libs:DiamondBank-OG")) // Import TrueOG Network DiamondBank-OG API.
 }
 
 tasks.withType<AbstractArchiveTask>().configureEach { // Ensure reproducible .jars
@@ -80,14 +78,9 @@ tasks.build {
 tasks.jar { archiveClassifier.set("part") }
 
 tasks.withType<JavaCompile>().configureEach {
-    dependsOn(":libs:DiamondBank-OG:publishToMavenLocal")
     options.compilerArgs.addAll(listOf("-parameters", "-Xlint:deprecation")) // Triggers deprecation warning messages.
     options.encoding = "UTF-8"
     options.isFork = true
-}
-
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
-    dependsOn(":libs:DiamondBank-OG:publishToMavenLocal")
 }
 
 spotless {
