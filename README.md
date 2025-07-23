@@ -2,7 +2,7 @@
 
 TrueOG Network's standard Java plugin template.
 
-Gradle Version: 8.14.2
+Gradle Version: 8.14.3
 
 Java Version: 17
 
