@@ -26,7 +26,7 @@ configurations.creating {
 
 configure<EclipseModel> {
     project {
-        name = "KotlinTemplate-OG-Plugin"
+        name = "Template-OG-Plugin"
     }
     classpath {
         plusConfigurations.add(ideLibs)
