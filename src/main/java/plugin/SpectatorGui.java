@@ -5,99 +5,112 @@ package plugin;
 // Import libraries.
 import java.util.ArrayList;
 import java.util.List;
-import net.kyori.adventure.text.TextComponent;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
-import net.trueog.gxui.GUIBase;
-import net.trueog.gxui.GUIButton;
-import net.trueog.gxui.GUIItem;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import net.trueog.gxui.GUIBase;
+import net.trueog.gxui.GUIButton;
+import net.trueog.gxui.GUIItem;
+
 public class SpectatorGui extends GUIBase {
 
-    private Player assignedPlayer;
+	private final Player assignedPlayer;
 
-    public SpectatorGui(JavaPlugin plugin, Player player) {
+	public SpectatorGui(JavaPlugin plugin, Player player) {
 
-        super(plugin, player, "&3&lTest GUI", 9, true);
+		super(plugin, player, "&3&lTest GUI", 9, true);
 
-        assignedPlayer = player;
-    }
+		assignedPlayer = player;
 
-    @Override
-    public void setupItems() {
+	}
 
-        int curr = 0;
-        GUIItem item = null;
-        List<String> name = new ArrayList<String>(18);
+	@Override
+	public void setupItems() {
 
-        for (Player p : Bukkit.getOnlinePlayers()) {
+		int curr = 0;
+		GUIItem item = null;
+		final List<String> name = new ArrayList<>(18);
 
-            // Add a new element to the list for each player.
-            name.add("&eTeleport to: &d&l" + p.getName());
-        }
+		// Add a new element to the list for each player.
+		Bukkit.getOnlinePlayers().forEach((Player p) -> name.add("&eTeleport to: &d&l" + p.getName()));
 
-        for (Player p : Bukkit.getOnlinePlayers()) {
+		for (Player p : Bukkit.getOnlinePlayers()) {
 
-            item = new GUIItem(Material.PLAYER_HEAD, 1, name.get(curr), p.getName());
-            GUIButton guibutton = new GUIButton() {
+			item = new GUIItem(Material.PLAYER_HEAD, 1, name.get(curr), p.getName());
+			final GUIButton guibutton = new GUIButton() {
 
-                @Override
-                public boolean leftClick() {
+				@Override
+				public boolean leftClick() {
 
-                    assignedPlayer.closeInventory();
-                    assignedPlayer.teleport(p);
+					assignedPlayer.closeInventory();
+					assignedPlayer.teleport(p);
 
-                    return true;
-                }
+					return true;
 
-                @Override
-                public boolean leftClickShift() {
-                    return false;
-                }
+				}
 
-                @Override
-                public boolean rightClick() {
-                    return false;
-                }
+				@Override
+				public boolean leftClickShift() {
 
-                @Override
-                public boolean rightClickShift() {
-                    return false;
-                }
-            };
+					return false;
 
-            item.setButton(guibutton);
+				}
 
-            addItem(curr, item);
-            curr = nextCurr(curr);
-        }
-    }
+				@Override
+				public boolean rightClick() {
 
-    private int nextCurr(int curr) {
+					return false;
 
-        if (curr == 3) {
+				}
 
-            return 6;
+				@Override
+				public boolean rightClickShift() {
 
-        } else {
+					return false;
 
-            return (curr += 1);
-        }
-    }
+				}
 
-    public static ArrayList<TextComponent> convertToTextComponents(List<String> stringList) {
+			};
 
-        ArrayList<TextComponent> textComponents = new ArrayList<TextComponent>(18);
-        for (String str : stringList) {
+			item.setButton(guibutton);
 
-            TextComponent textComponent =
-                    LegacyComponentSerializer.legacyAmpersand().deserialize(str);
-            textComponents.add(textComponent);
-        }
+			addItem(curr, item);
+			curr = nextCurr(curr);
 
-        return textComponents;
-    }
+		}
+
+	}
+
+	private int nextCurr(int curr) {
+
+		if (curr == 3) {
+
+			return 6;
+
+		} else {
+
+			return (curr += 1);
+
+		}
+
+	}
+
+	public static ArrayList<TextComponent> convertToTextComponents(List<String> stringList) {
+
+		final ArrayList<TextComponent> textComponents = new ArrayList<>(18);
+		for (int i = 0; i < stringList.size(); i++) {
+			final String str = stringList.get(i);
+			final TextComponent textComponent = LegacyComponentSerializer.legacyAmpersand().deserialize(str);
+			textComponents.add(textComponent);
+		}
+
+		return textComponents;
+
+	}
+
 }

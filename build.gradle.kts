@@ -4,12 +4,13 @@ import org.gradle.kotlin.dsl.provideDelegate
 
 /* ------------------------------ Plugins ------------------------------ */
 plugins {
-    id("java") // Tell gradle this is a java project.
-    id("java-library") // Import helper for source-based libraries.
-    kotlin("jvm") version "2.1.21" // Import kotlin jvm plugin for kotlin/java integration.
-    id("com.diffplug.spotless") version "7.0.4" // Import auto-formatter.
-    id("com.gradleup.shadow") version "8.3.6" // Import shadow API.
-    eclipse // Import eclipse plugin for IDE integration.
+    id("java") // Import Java plugin.
+    id("java-library") // Import Java Library plugin.
+    id("com.diffplug.spotless") version "7.0.4" // Import Spotless plugin.
+    id("com.gradleup.shadow") version "8.3.6" // Import Shadow plugin.
+    id("checkstyle") // Import Checkstyle plugin.
+    eclipse // Import Eclipse plugin.
+    kotlin("jvm") version "2.1.21" // Import Kotlin JVM plugin.
 }
 
 extra["kotlinAttribute"] = Attribute.of("kotlin-tag", Boolean::class.javaObjectType)
@@ -28,11 +29,11 @@ java {
 kotlin { jvmToolchain(17) }
 
 /* ----------------------------- Metadata ------------------------------ */
-group = "net.trueog.template-og"
+group = "net.trueog.template-og" // Declare bundle identifier.
 
-version = "1.0"
+version = "1.0" // Declare plugin version (will be in .jar).
 
-val apiVersion = "1.19"
+val apiVersion = "1.19" // Declare minecraft server target version.
 
 /* ----------------------------- Resources ----------------------------- */
 tasks.named<ProcessResources>("processResources") {
@@ -44,9 +45,9 @@ tasks.named<ProcessResources>("processResources") {
 
 /* ---------------------------- Repos ---------------------------------- */
 repositories {
-    mavenCentral()
-    gradlePluginPortal()
-    maven { url = uri("https://repo.purpurmc.org/snapshots") }
+    mavenCentral() // Import the Maven Central Maven Repository.
+    gradlePluginPortal() // Import the Gradle Plugin Portal Maven Repository.
+    maven { url = uri("https://repo.purpurmc.org/snapshots") } // Import the PurpurMC Maven Repository.
     maven { url = uri("file://${System.getProperty("user.home")}/.m2/repository") }
     System.getProperty("SELF_MAVEN_LOCAL_REPO")?.let { // TrueOG Bootstrap mavenLocal().
         val dir = file(it)
@@ -55,18 +56,23 @@ repositories {
             maven { url = uri("file://${dir.absolutePath}") }
         } else {
             logger.error("TrueOG Bootstrap not found, defaulting to ~/.m2 for mavenLocal()")
+            mavenLocal()
         }
     } ?: logger.error("TrueOG Bootstrap not found, defaulting to ~/.m2 for mavenLocal()")
 }
 
 /* ---------------------- Java project deps ---------------------------- */
 dependencies {
-    compileOnly("org.purpurmc.purpur:purpur-api:1.19.4-R0.1-SNAPSHOT")
-    compileOnly("io.github.miniplaceholders:miniplaceholders-api:2.2.3")
-    compileOnlyApi(project(":libs:Utilities-OG"))
-    compileOnlyApi(project(":libs:GxUI-OG"))
-    compileOnlyApi(project(":libs:Chat-OG")) { attributes { attribute(kotlinAttribute, true) } }
-    compileOnlyApi(project(":libs:DiamondBank-OG")) { attributes { attribute(kotlinAttribute, true) } }
+    compileOnly("org.purpurmc.purpur:purpur-api:1.19.4-R0.1-SNAPSHOT") // Declare Purpur API version to be packaged.
+    compileOnly("io.github.miniplaceholders:miniplaceholders-api:2.2.3") // Import MiniPlaceholders API.
+    compileOnlyApi(project(":libs:Utilities-OG")) // Import TrueOG Network Utilities-OG Java API (from source).
+    compileOnlyApi(project(":libs:GxUI-OG")) // Import TrueOG Network GxUI-OG Java API (from source).
+    compileOnlyApi(project(":libs:Chat-OG")) {
+        attributes { attribute(kotlinAttribute, true) }
+    } // Import TrueOG Network Chat-OG Kotlin API (from source).
+    compileOnlyApi(project(":libs:DiamondBank-OG")) {
+        attributes { attribute(kotlinAttribute, true) }
+    } // Import TrueOG network DiamondBank-OG Kotlin API (from source).
 }
 
 apply(from = "eclipse.gradle.kts")
@@ -86,28 +92,40 @@ tasks.shadowJar {
 
 tasks.jar { archiveClassifier.set("part") } // Applies to root jarfile only.
 
-tasks.build { dependsOn(tasks.spotlessApply, tasks.shadowJar) }
+tasks.build { dependsOn(tasks.spotlessApply, tasks.shadowJar) } // Build depends on spotless and shadow.
 
 /* --------------------------- Javac opts ------------------------------- */
 tasks.withType<JavaCompile>().configureEach {
-    options.compilerArgs.add("-Xlint:deprecation") // Triggers deprecation warning messages.
-    options.encoding = "UTF-8"
+    options.compilerArgs.add("-Xlint:deprecation") // Trigger deprecation warning messages.
+    options.encoding = "UTF-8" // Use UTF-8 file encoding.
     options.isFork = true
 }
 
 /* ----------------------------- Auto Formatting ------------------------ */
 spotless {
     kotlin { ktfmt().kotlinlangStyle().configure { it.setMaxWidth(120) } }
+    java {
+        eclipse().configFile("config/formatter/eclipse-java-formatter.xml") // Eclipse java formatting.
+        leadingTabsToSpaces() // Convert leftover leading tabs to spaces.
+        removeUnusedImports() // Remove imports that aren't being called.
+    }
     kotlinGradle {
-        ktfmt().kotlinlangStyle().configure { it.setMaxWidth(120) }
-        target("build.gradle.kts", "settings.gradle.kts")
+        ktfmt().kotlinlangStyle().configure { it.setMaxWidth(120) } // JetBrains Kotlin formatting.
+        target("build.gradle.kts", "settings.gradle.kts") // Gradle files to format.
     }
 }
 
-// This can't be put in eclipse.gradle.kts because Gradle is weird.
-subprojects {
-    apply(plugin = "java-library")
-    apply(plugin = "eclipse")
-    eclipse.project.name = "${project.name}-${rootProject.name}"
-    tasks.withType<Jar>().configureEach { archiveBaseName.set("${project.name}-${rootProject.name}") }
+checkstyle {
+    toolVersion = "10.18.1" // Declare checkstyle version to use.
+    configFile = file("config/checkstyle/checkstyle.xml") // Point checkstyle to config file.
+    isIgnoreFailures = true // Don't fail the build if checkstyle does not pass.
+    isShowViolations = true // Show the violations in any IDE with the checkstyle plugin.
+}
+
+tasks.named("compileJava") {
+    dependsOn("spotlessApply") // Run spotless before compiling with the JDK.
+}
+
+tasks.named("spotlessCheck") {
+    dependsOn("spotlessApply") // Run spotless before checking if spotless ran.
 }

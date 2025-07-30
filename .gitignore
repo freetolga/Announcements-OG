@@ -34,7 +34,13 @@ build/
 .settings/
 .project
 .classpath
+.checkstyle
 bin/
 
 # IntelliJ files
 .idea/
+.kotlin
+*.iml
+*.ipr
+*.iws
+out/
