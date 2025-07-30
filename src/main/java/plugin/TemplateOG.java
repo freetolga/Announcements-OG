@@ -11,51 +11,51 @@ import net.trueog.diamondbankog.DiamondBankAPIJava;
 
 public class TemplateOG extends JavaPlugin {
 
-	private static TemplateOG plugin;
-	private static DiamondBankAPIJava diamondBankAPI;
-	private static FileConfiguration config;
+    private static TemplateOG plugin;
+    private static DiamondBankAPIJava diamondBankAPI;
+    private static FileConfiguration config;
 
-	@Override
-	public void onEnable() {
+    @Override
+    public void onEnable() {
 
-		plugin = this;
+        plugin = this;
 
-		saveDefaultConfig();
-		config = getConfig();
+        saveDefaultConfig();
+        config = getConfig();
 
-		getServer().getPluginManager().registerEvents(new Listeners(), this);
+        getServer().getPluginManager().registerEvents(new Listeners(), this);
 
-		final RegisteredServiceProvider<DiamondBankAPIJava> provider = getServer().getServicesManager()
-				.getRegistration(DiamondBankAPIJava.class);
+        final RegisteredServiceProvider<DiamondBankAPIJava> provider = getServer().getServicesManager()
+                .getRegistration(DiamondBankAPIJava.class);
 
-		if (provider == null) {
+        if (provider == null) {
 
-			getLogger().severe("DiamondBank-OG API is null – disabling plugin.");
-			Bukkit.getPluginManager().disablePlugin(this);
-			return;
+            getLogger().severe("DiamondBank-OG API is null – disabling plugin.");
+            Bukkit.getPluginManager().disablePlugin(this);
+            return;
 
-		}
+        }
 
-		diamondBankAPI = provider.getProvider();
+        diamondBankAPI = provider.getProvider();
 
-	}
+    }
 
-	public static TemplateOG getPlugin() {
+    public static TemplateOG getPlugin() {
 
-		return plugin;
+        return plugin;
 
-	}
+    }
 
-	public static DiamondBankAPIJava diamondBankAPI() {
+    public static DiamondBankAPIJava diamondBankAPI() {
 
-		return diamondBankAPI;
+        return diamondBankAPI;
 
-	}
+    }
 
-	public static FileConfiguration config() {
+    public static FileConfiguration config() {
 
-		return config;
+        return config;
 
-	}
+    }
 
 }

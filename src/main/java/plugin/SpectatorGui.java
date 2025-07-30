@@ -19,98 +19,100 @@ import net.trueog.gxui.GUIItem;
 
 public class SpectatorGui extends GUIBase {
 
-	private final Player assignedPlayer;
+    private final Player assignedPlayer;
 
-	public SpectatorGui(JavaPlugin plugin, Player player) {
+    public SpectatorGui(JavaPlugin plugin, Player player) {
 
-		super(plugin, player, "&3&lTest GUI", 9, true);
+        super(plugin, player, "&3&lTest GUI", 9, true);
 
-		assignedPlayer = player;
+        assignedPlayer = player;
 
-	}
+    }
 
-	@Override
-	public void setupItems() {
+    @Override
+    public void setupItems() {
 
-		int curr = 0;
-		GUIItem item = null;
-		final List<String> name = new ArrayList<>(18);
+        int curr = 0;
+        GUIItem item = null;
+        final List<String> name = new ArrayList<>(18);
 
-		// Add a new element to the list for each player.
-		Bukkit.getOnlinePlayers().forEach((Player p) -> name.add("&eTeleport to: &d&l" + p.getName()));
+        // Add a new element to the list for each player.
+        Bukkit.getOnlinePlayers().forEach((Player p) -> name.add("&eTeleport to: &d&l" + p.getName()));
 
-		for (Player p : Bukkit.getOnlinePlayers()) {
+        for (Player p : Bukkit.getOnlinePlayers()) {
 
-			item = new GUIItem(Material.PLAYER_HEAD, 1, name.get(curr), p.getName());
-			final GUIButton guibutton = new GUIButton() {
+            item = new GUIItem(Material.PLAYER_HEAD, 1, name.get(curr), p.getName());
+            final GUIButton guibutton = new GUIButton() {
 
-				@Override
-				public boolean leftClick() {
+                @Override
+                public boolean leftClick() {
 
-					assignedPlayer.closeInventory();
-					assignedPlayer.teleport(p);
+                    assignedPlayer.closeInventory();
+                    assignedPlayer.teleport(p);
 
-					return true;
+                    return true;
 
-				}
+                }
 
-				@Override
-				public boolean leftClickShift() {
+                @Override
+                public boolean leftClickShift() {
 
-					return false;
+                    return false;
 
-				}
+                }
 
-				@Override
-				public boolean rightClick() {
+                @Override
+                public boolean rightClick() {
 
-					return false;
+                    return false;
 
-				}
+                }
 
-				@Override
-				public boolean rightClickShift() {
+                @Override
+                public boolean rightClickShift() {
 
-					return false;
+                    return false;
 
-				}
+                }
 
-			};
+            };
 
-			item.setButton(guibutton);
+            item.setButton(guibutton);
 
-			addItem(curr, item);
-			curr = nextCurr(curr);
+            addItem(curr, item);
+            curr = nextCurr(curr);
 
-		}
+        }
 
-	}
+    }
 
-	private int nextCurr(int curr) {
+    private int nextCurr(int curr) {
 
-		if (curr == 3) {
+        if (curr == 3) {
 
-			return 6;
+            return 6;
 
-		} else {
+        } else {
 
-			return (curr += 1);
+            return (curr += 1);
 
-		}
+        }
 
-	}
+    }
 
-	public static ArrayList<TextComponent> convertToTextComponents(List<String> stringList) {
+    public static ArrayList<TextComponent> convertToTextComponents(List<String> stringList) {
 
-		final ArrayList<TextComponent> textComponents = new ArrayList<>(18);
-		for (int i = 0; i < stringList.size(); i++) {
-			final String str = stringList.get(i);
-			final TextComponent textComponent = LegacyComponentSerializer.legacyAmpersand().deserialize(str);
-			textComponents.add(textComponent);
-		}
+        final ArrayList<TextComponent> textComponents = new ArrayList<>(18);
+        for (int i = 0; i < stringList.size(); i++) {
 
-		return textComponents;
+            final String str = stringList.get(i);
+            final TextComponent textComponent = LegacyComponentSerializer.legacyAmpersand().deserialize(str);
+            textComponents.add(textComponent);
 
-	}
+        }
+
+        return textComponents;
+
+    }
 
 }
