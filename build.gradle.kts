@@ -75,7 +75,7 @@ dependencies {
     } // Import TrueOG network DiamondBank-OG Kotlin API (from source).
 }
 
-apply(from = "eclipse.gradle.kts")
+apply(from = "eclipse.gradle.kts") // Import eclipse classpath support script.
 
 /* ---------------------- Reproducible jars ---------------------------- */
 tasks.withType<AbstractArchiveTask>().configureEach { // Ensure reproducible .jars
