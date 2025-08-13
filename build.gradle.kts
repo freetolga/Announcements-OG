@@ -103,7 +103,6 @@ tasks.withType<JavaCompile>().configureEach {
 
 /* ----------------------------- Auto Formatting ------------------------ */
 spotless {
-    kotlin { ktfmt().kotlinlangStyle().configure { it.setMaxWidth(120) } }
     java {
         eclipse().configFile("config/formatter/eclipse-java-formatter.xml") // Eclipse java formatting.
         leadingTabsToSpaces() // Convert leftover leading tabs to spaces.

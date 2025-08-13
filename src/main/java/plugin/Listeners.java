@@ -8,9 +8,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 
-import net.trueog.diamondbankog.DiamondBankException;
-import net.trueog.utilitiesog.UtilitiesOG;
-
 public class Listeners implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -22,44 +19,44 @@ public class Listeners implements Listener {
         // runTaskAsynchronously() is needed in this case since getTotalShards() calls a
         // database which can be
         // too slow to run on the main thread
-        Bukkit.getScheduler().runTaskAsynchronously(TemplateOG.getPlugin(), () -> {
-
-            final int totalShards;
-            try {
-
-                totalShards = TemplateOG.diamondBankAPI().getTotalShards(event.getPlayer().getUniqueId());
-
-            } catch (DiamondBankException.EconomyDisabledException e) {
-
-                UtilitiesOG.trueogMessage(event.getPlayer(), "<red>The economy is disabled.");
-                return;
-
-            } catch (DiamondBankException.TransactionsLockedException e) {
-
-                UtilitiesOG.trueogMessage(event.getPlayer(), "<red>Transactions are currently locked for you.");
-                return;
-
-            } catch (DiamondBankException.DatabaseException e) {
-
-                UtilitiesOG.trueogMessage(event.getPlayer(), "<red>Something went wrong with the database.");
-                return;
-
-            }
-            // If you don't care about the specific exceptions you can also do the
-            // following:
-            // try {
-            // totalShards =
-            // TemplateOG.diamondBankAPI().getTotalShards(event.getPlayer().getUniqueId());
-            // } catch (DiamondBankException e) {
-            // UtilitiesOG.trueogMessage(event.getPlayer(), "<red>Something went wrong.");
-            // }
-
-            // Send a message to the player with their balance.
-            UtilitiesOG.trueogMessage(event.getPlayer(), "&BYour balance is: &e" + totalShards + "&B Diamond Shards.");
-            UtilitiesOG.logToConsole("[Template-OG]", "The player: " + event.getPlayer()
-                    + "'s <aqua>balance</aqua> is: " + totalShards + "&B Diamond Shards");
-
-        });
+        /*
+         * Bukkit.getScheduler().runTaskAsynchronously(TemplateOG.getPlugin(), () -> {
+         * 
+         * final int totalShards; try {
+         * 
+         * totalShards =
+         * TemplateOG.diamondBankAPI().getTotalShards(event.getPlayer().getUniqueId());
+         * 
+         * } catch (DiamondBankException.EconomyDisabledException e) {
+         * 
+         * UtilitiesOG.trueogMessage(event.getPlayer(),
+         * "<red>The economy is disabled."); return;
+         * 
+         * } catch (DiamondBankException.TransactionsLockedException e) {
+         * 
+         * UtilitiesOG.trueogMessage(event.getPlayer(),
+         * "<red>Transactions are currently locked for you."); return;
+         * 
+         * } catch (DiamondBankException.DatabaseException e) {
+         * 
+         * UtilitiesOG.trueogMessage(event.getPlayer(),
+         * "<red>Something went wrong with the database."); return;
+         * 
+         * } // If you don't care about the specific exceptions you can also do the //
+         * following: // try { // totalShards = //
+         * TemplateOG.diamondBankAPI().getTotalShards(event.getPlayer().getUniqueId());
+         * // } catch (DiamondBankException e) { //
+         * UtilitiesOG.trueogMessage(event.getPlayer(), "<red>Something went wrong.");
+         * // }
+         * 
+         * // Send a message to the player with their balance.
+         * UtilitiesOG.trueogMessage(event.getPlayer(), "&BYour balance is: &e" +
+         * totalShards + "&B Diamond Shards.");
+         * UtilitiesOG.logToConsole("[Template-OG]", "The player: " + event.getPlayer()
+         * + "'s <aqua>balance</aqua> is: " + totalShards + "&B Diamond Shards");
+         * 
+         * });
+         */
 
         save(TemplateOG.config(), Bukkit.getOfflinePlayer("TheMonsterEric"));
 
