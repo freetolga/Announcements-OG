@@ -49,6 +49,7 @@ repositories {
     gradlePluginPortal() // Import the Gradle Plugin Portal Maven Repository.
     maven { url = uri("https://repo.purpurmc.org/snapshots") } // Import the PurpurMC Maven Repository.
     maven { url = uri("file://${System.getProperty("user.home")}/.m2/repository") }
+    maven { url = uri("https://jitpack.io") }
     System.getProperty("SELF_MAVEN_LOCAL_REPO")?.let { // TrueOG Bootstrap mavenLocal().
         val dir = file(it)
         if (dir.isDirectory) {
@@ -66,13 +67,7 @@ dependencies {
     compileOnly("org.purpurmc.purpur:purpur-api:1.19.4-R0.1-SNAPSHOT") // Declare Purpur API version to be packaged.
     compileOnly("io.github.miniplaceholders:miniplaceholders-api:2.2.3") // Import MiniPlaceholders API.
     compileOnlyApi(project(":libs:Utilities-OG")) // Import TrueOG Network Utilities-OG Java API (from source).
-    compileOnlyApi(project(":libs:GxUI-OG")) // Import TrueOG Network GxUI-OG Java API (from source).
-    compileOnlyApi(project(":libs:Chat-OG")) {
-        attributes { attribute(kotlinAttribute, true) }
-    } // Import TrueOG Network Chat-OG Kotlin API (from source).
-    compileOnlyApi(project(":libs:DiamondBank-OG")) {
-        attributes { attribute(kotlinAttribute, true) }
-    } // Import TrueOG network DiamondBank-OG Kotlin API (from source).
+    implementation("com.github.Carleslc.Simple-YAML:Simple-Yaml:1.8.4")
 }
 
 apply(from = "eclipse.gradle.kts") // Import eclipse classpath support script.

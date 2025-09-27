@@ -1,1 +1,11 @@
 # Template-OG Config File
+
+# a list of announcements to make, this list will be iterated upon(looping back once its over) and printed every 5 minutes
+announcements: [
+    "Announcement1",
+    "Announcement2",
+    "Announcement3"
+]
+
+# the amount of seconds until the next announcement(loops over) is made
+timeInterval: 300

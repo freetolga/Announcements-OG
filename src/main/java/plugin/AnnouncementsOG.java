@@ -2,16 +2,18 @@
 // Author: NotAlexNoyle.
 package plugin;
 
+import java.util.List;
+
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import net.trueog.diamondbankog.DiamondBankAPIJava;
 
 public class AnnouncementsOG extends JavaPlugin {
 
     private static AnnouncementsOG plugin;
-    private static DiamondBankAPIJava diamondBankAPI;
+    private static AnnouncementTask announcementTask;
     private static FileConfiguration config;
+    private static long timeInterval;
+    private static List<String> announcements;
 
     @Override
     public void onEnable() {
@@ -21,33 +23,24 @@ public class AnnouncementsOG extends JavaPlugin {
         saveDefaultConfig();
         config = getConfig();
 
-        getServer().getPluginManager().registerEvents(new Listeners(), this);
+        announcements = config.getStringList("announcements");
+        timeInterval = config.getInt("timeInterval");
 
-        /*
-         * final RegisteredServiceProvider<DiamondBankAPIJava> provider =
-         * getServer().getServicesManager() .getRegistration(DiamondBankAPIJava.class);
-         * 
-         * if (provider == null) {
-         * 
-         * getLogger().severe("DiamondBank-OG API is null – disabling plugin.");
-         * Bukkit.getPluginManager().disablePlugin(this); return;
-         * 
-         * }
-         * 
-         * diamondBankAPI = provider.getProvider();
-         */
+        announcementTask = new AnnouncementTask(announcements, timeInterval);
+        announcementTask.runTaskTimerAsynchronously(plugin, timeInterval * 20, timeInterval * 20);
+
+    }
+
+    @Override
+    public void onDisable() {
+
+        announcementTask.cancel();
 
     }
 
     public static AnnouncementsOG getPlugin() {
 
         return plugin;
-
-    }
-
-    public static DiamondBankAPIJava diamondBankAPI() {
-
-        return diamondBankAPI;
 
     }
 
