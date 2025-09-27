@@ -1,10 +1,9 @@
-name: Template-OG
-author: NotAlexNoyle
-description: A blank plugin for TrueOG from which to base other plugins off of.
-website: https://github.com/true-og/Template-OG/
+name: Announcements-OG
+author: freetolga
+description: regular announcments based on utilities-og
+website: https://github.com/true-og/Announcements-OG
 version: '${version}'
 api-version: '${apiVersion}'
-main: plugin.TemplateOG
+main: plugin.AnnouncementsOG
 depend: 
-#  - DiamondBank-OG
   - Utilities-OG
