@@ -11,42 +11,31 @@ public class AnnouncementsOG extends JavaPlugin {
 
     private static AnnouncementsOG plugin;
     // store the pointer to the task to prepare for reloading support
-    private static AnnouncementTask announcementTask;
+    private AnnouncementManager announcementManager;
     private static FileConfiguration config;
-    
+
     // declare these inside the class to change them later when reloading is added
     // might be reorganized later
-    private static long timeInterval;
-    private static List<String> announcements;
+    private long interval;
+    private List<String> announcements;
+
+    public AnnouncementsOG() {
+
+        plugin = this;
+        saveDefaultConfig();
+        config = getConfig();
+        announcements = config.getStringList("announcements");
+        interval = config.getLong("timeInterval");
+        announcementManager = new AnnouncementManager(announcements, interval, 0);
+
+    }
 
     @Override
     public void onEnable() {
 
-    	// get a pointer to the main plugin class to pass into other methods later
-        plugin = this;
+        // get a pointer to the main plugin class to pass into other methods later
 
-        // initialize config with default value if it doesnt exist yet
-        saveDefaultConfig();
-
-        // load the configuration from the server otherwise
-        config = getConfig();
-
-        // get the value of these config.yml keys
-        announcements = config.getStringList("announcements");
-        timeInterval = config.getInt("timeInterval");
-
-        // populate the pointer to the task by creating an instance of it
-        announcementTask = new AnnouncementTask(announcements, timeInterval);
-
-        // call the method on the task to run it
-        announcementTask.runTaskTimerAsynchronously(
-        		// instance of our plugin
-        		plugin,
-        		// run every timeInterval seconds
-        		timeInterval * 20,
-        		// run for(or wait depending on how you look at it) every timeInterval seconds
-        		// before starting the task again
-        		timeInterval * 20);
+        announcementManager.start();
 
     }
 
@@ -54,7 +43,18 @@ public class AnnouncementsOG extends JavaPlugin {
     @Override
     public void onDisable() {
 
-        announcementTask.cancel();
+        announcementManager.stop();
+
+    }
+
+    @Override
+    public void reloadConfig() {
+
+        this.announcements = config.getStringList("announcements");
+        this.interval = config.getLong("timeInterval");
+        announcementManager.Announcements = this.announcements;
+        announcementManager.timeInterval = this.interval;
+        announcementManager.reload(0);
 
     }
 
